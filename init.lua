@@ -1,7 +1,6 @@
 
 -- ~/.config/nvim/init.lua
 
--- Базовые настройки
 vim.g.mapleader = " "
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -11,7 +10,6 @@ vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 vim.opt.updatetime = 250
 
--- Встроенный LSP (Neovim 0.11+)
 vim.lsp.config('clangd', {
   cmd = { 'clangd' },
   filetypes = { 'c', 'cpp' },
@@ -19,7 +17,7 @@ vim.lsp.config('clangd', {
 })
 vim.lsp.enable('clangd')
 
--- Автодополнение из коробки (Neovim 0.11+)
+
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -29,7 +27,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
--- Хоткеи для LSP
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
     local opts = { buffer = args.buf }
@@ -40,22 +37,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format({ async = true }) end, opts)
   end,
 })
-
--- ==========================================
--- КОМПИЛЯЦИЯ И ЗАПУСК C В КРАСИВОМ ОКНЕ
--- ==========================================
+-- компиляция
 vim.keymap.set("n", "rr", function()
-    -- 1. Проверяем, что файл сохранен на диск
+
     if vim.fn.expand("%:p") == "" then
         print("Ошибка: Сначала сохрани файл с расширением .c!")
         return
     end
-    vim.cmd("w") -- Сохраняем файл перед компиляцией
+    vim.cmd("w") 
 
-    -- 2. Получаем абсолютный путь к файлу и экранируем пробелы
+
     local file = vim.fn.shellescape(vim.fn.expand("%:p"))
 
-    -- 3. Создаем буфер и всплывающее окно
+
     local buf = vim.api.nvim_create_buf(false, true)
     local width = math.floor(vim.o.columns * 0.8)
     local height = math.floor(vim.o.lines * 0.7)
@@ -69,13 +63,11 @@ vim.keymap.set("n", "rr", function()
         row = row,
         col = col,
         style = "minimal",
-        border = "rounded", -- Скругленные углы в стиле Cybercore
+        border = "rounded", 
         title = " [ C Build & Run ] ",
         title_pos = "center",
     })
 
-    -- 4. Команда компиляции и запуска
-    -- Добавил -Wall -Wextra, чтобы компилятор сразу ругался на твои косяки
     local cmd = "gcc " .. file .. " -Wall -Wextra -o /tmp/a.out && /tmp/a.out"
     vim.fn.termopen(cmd)
 
@@ -93,7 +85,7 @@ vim.keymap.set("n", "rr", function()
     vim.keymap.set("n", "q", ":bd!<CR>", { buffer = buf, nowait = true })
 end, { desc = "Compile and Run C in floating window" })
 
--- Навигация по ошибкам компиляции (нативный Quickfix)
+
 vim.keymap.set("n", "<leader>co", ":copen<CR>", { desc = "Open Quickfix" })
 vim.keymap.set("n", "<leader>cn", ":cnext<CR>", { desc = "Next Error" })
 vim.keymap.set("n", "<leader>cp", ":cprev<CR>", { desc = "Prev Error" })
