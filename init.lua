@@ -71,17 +71,15 @@ vim.keymap.set("n", "rr", function()
     local cmd = "gcc " .. file .. " -Wall -Wextra -o /tmp/a.out && /tmp/a.out"
     vim.fn.termopen(cmd)
 
-    -- ==========================================
-    -- ХОТКЕИ ДЛЯ УПРАВЛЕНИЯ ОКНОМ
-    -- ==========================================
+ 
 
-    -- Выход из режима терминала в Normal mode (чтобы скопировать текст)
+ 
     vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { buffer = buf, nowait = true })
 
-    -- Мгновенное закрытие из терминала (если программа зависла на scanf)
+   
     vim.keymap.set("t", "<C-t>", "<C-\\><C-n>:bd!<CR>", { buffer = buf, nowait = true })
 
-    -- Закрытие из Normal mode (нажми q, когда курсор внутри окна)
+    
     vim.keymap.set("n", "q", ":bd!<CR>", { buffer = buf, nowait = true })
 end, { desc = "Compile and Run C in floating window" })
 
@@ -107,7 +105,7 @@ local comment  = "#555555" -- Темно-серый для комментов
 vim.cmd("highlight clear")
 if vim.fn.exists("syntax_on") then vim.cmd("syntax reset") end
 
--- Применяем наши цвета
+
 vim.api.nvim_set_hl(0, "Normal",       { bg = bg, fg = fg })
 vim.api.nvim_set_hl(0, "Comment",      { fg = comment, italic = true })
 vim.api.nvim_set_hl(0, "String",       { fg = neon_gr })
@@ -116,18 +114,16 @@ vim.api.nvim_set_hl(0, "Keyword",      { fg = neon_gr, bold = true })  -- if, re
 vim.api.nvim_set_hl(0, "Type",         { fg = neon_cy, bold = true })  -- char, float
 vim.api.nvim_set_hl(0, "Variable",     { fg = neon_cy })
 vim.api.nvim_set_hl(0, "Number",       { fg = neon_pu })
-vim.api.nvim_set_hl(0, "Operator",     { fg = fg })                    -- +, -, =
-
--- Цвета интерфейса (номера строк, курсор)
+vim.api.nvim_set_hl(0, "Operator",     { fg = fg })                    
 vim.api.nvim_set_hl(0, "LineNr",       { fg = comment })
 vim.api.nvim_set_hl(0, "CursorLineNr", { fg = neon_gr, bold = true })
 vim.api.nvim_set_hl(0, "CursorLine",   { bg = "#151515" })
-vim.api.nvim_set_hl(0, "Visual",       { bg = "#2a2a2a" })              -- Выделение
-vim.api.nvim_set_hl(0, "Normal", { bg = "none", fg = fg }) -- Убирает фон Neovim
--- Красивые ошибки
-vim.api.nvim_set_hl(0, "ErrorMsg", { fg = "#ff003c", bold = true }) -- Кроваво-красный
-vim.api.nvim_set_hl(0, "WarningMsg", { fg = neon_pu })              -- Фиолетовый
+vim.api.nvim_set_hl(0, "Visual",       { bg = "#2a2a2a" })             
+vim.api.nvim_set_hl(0, "Normal", { bg = "none", fg = fg }) 
+
+vim.api.nvim_set_hl(0, "ErrorMsg", { fg = "#ff003c", bold = true }) 
+vim.api.nvim_set_hl(0, "WarningMsg", { fg = neon_pu })             
 vim.api.nvim_set_hl(0, "Error", { fg = "#ff003c" })
--- Быстрое закрытие терминала: Ctrl + t
+
 vim.keymap.set("t", "<C-t>", "<C-\\><C-n>:q<CR>", { desc = "Close terminal" })
 
